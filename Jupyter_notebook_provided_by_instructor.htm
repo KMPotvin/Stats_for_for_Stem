@@ -1,0 +1,992 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0101)https://learn.snhu.edu/d2l/le/dropbox/894405/1517486/DownloadSubmissionFile?fid=53870060&sid=21808051 -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style></style><script async="" src="./Jupyter_notebook_provided_by_instructor_files/adblocker-chromeglobalinjectjs.js.download"></script></head><body data-new-gr-c-s-check-loaded="14.1039.0" data-gr-ext-installed="">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+    
+    
+
+  <div class="border-box-sizing">
+    <div class="container">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1>Project One: Data Visualization, Descriptive Statistics, Confidence Intervals<a rel="noopener" class="anchor-link" href="https://learn.snhu.edu/d2l/le/dropbox/894405/1517486/DownloadSubmissionFile?fid=53870060&amp;sid=21808051#Project-One:-Data-Visualization,-Descriptive-Statistics,-Confidence-Intervals">¶</a></h1><p>This notebook contains the step-by-step directions for Project One. It is very important to run through the steps in order. Some steps depend on the outputs of earlier steps. Once you have completed the steps in this notebook, be sure to write your summary report.</p>
+<p>You are a data analyst for a basketball team and have access to a large set of historical data that you can use to analyze performance patterns. The coach of the team and your management have requested that you use descriptive statistics and data visualization techniques to study distributions of key performance metrics that are included in the data set. These data-driven analytics will help make key decisions to improve the performance of the team. You will use the Python programming language to perform the statistical analyses and then prepare a report of your findings to present for the team’s management. Since the managers are not data analysts, you will need to interpret your findings and describe their practical implications.</p>
+<p>There are four important variables in the data set that you will study in Project One.</p>
+<table>
+<thead><tr>
+<th><div style="text-align: left;"> Variable </div></th>
+<th><div style="text-align: left;"> What does it represent? </div></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><div style="text-align: left;"> pts </div></td>
+<td><div style="text-align: left;"> Points scored by the team in a game </div></td>
+</tr>
+<tr>
+<td><div style="text-align: left;"> elo_n </div></td>
+<td><div style="text-align: left;"> A measure of the relative skill level of the team in the league </div></td>
+</tr>
+<tr>
+<td><div style="text-align: left;"> year_id </div></td>
+<td><div style="text-align: left;"> Year when the team played the games </div></td>
+</tr>
+<tr>
+<td><div style="text-align: left;"> fran_id </div></td>
+<td><div style="text-align: left;"> Name of the NBA team </div></td>
+</tr>
+</tbody>
+</table>
+<p>The ELO rating, represented by the variable <strong>elo_n</strong>, is used as a measure of the relative skill of a team. This measure is inferred based on the final score of a game, the game location, and the outcome of the game relative to the probability of that outcome. The higher the number, the higher  the relative skill of a team.</p>
+<p>In addition to studying data on your own team, your management has assigned you a second team so that you can compare its performance with your own team's.</p>
+<table>
+<thead><tr>
+<th><div style="text-align: left;"> Team </div></th>
+<th><div style="text-align: left;"> What does it represent? </div></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><div style="text-align: left;"> Your Team </div></td>
+<td><div style="text-align: left;"> This is the team that has hired you as an analyst. This is the team that you will pick below. See Step 2.</div></td>
+</tr>
+<tr>
+<td><div style="text-align: left;"> Assigned Team </div></td>
+<td><div style="text-align: left;"> This is the team that the management has assigned to you to compare against your team. See Step 1. </div></td>
+</tr>
+</tbody>
+</table>
+<p>Reminder: It may be beneficial to review the summary report template for Project One prior to starting this Python script. That will give you an idea of the questions you will need to answer with the outputs of this script.</p>
+<hr>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2>Step 1: Data Preparation &amp; the Assigned Team<a rel="noopener" class="anchor-link" href="https://learn.snhu.edu/d2l/le/dropbox/894405/1517486/DownloadSubmissionFile?fid=53870060&amp;sid=21808051#Step-1:-Data-Preparation-&amp;-the-Assigned-Team">¶</a></h2><p>This step uploads the data set from a CSV file. It also selects the assigned team for this analysis. Do not make any changes to the code block below.</p>
+<ol>
+<li>The <strong>assigned team</strong> is the <font color="blue"><strong>Chicago Bulls</strong></font> from the years <font color="blue"><strong>1996-1998</strong> </font></li>
+</ol>
+<p>Click the block of code below and hit the <strong>Run</strong> button above.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">scipy.stats</span> <span class="k">as</span> <span class="nn">st</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="k">import</span> <span class="n">display</span><span class="p">,</span> <span class="n">HTML</span>
+
+<span class="n">nba_orig_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'nbaallelo.csv'</span><span class="p">)</span>
+<span class="n">nba_orig_df</span> <span class="o">=</span> <span class="n">nba_orig_df</span><span class="p">[(</span><span class="n">nba_orig_df</span><span class="p">[</span><span class="s1">'lg_id'</span><span class="p">]</span><span class="o">==</span><span class="s1">'NBA'</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">nba_orig_df</span><span class="p">[</span><span class="s1">'is_playoffs'</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span><span class="p">)]</span>
+<span class="n">columns_to_keep</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'game_id'</span><span class="p">,</span><span class="s1">'year_id'</span><span class="p">,</span><span class="s1">'fran_id'</span><span class="p">,</span><span class="s1">'pts'</span><span class="p">,</span><span class="s1">'opp_pts'</span><span class="p">,</span><span class="s1">'elo_n'</span><span class="p">,</span><span class="s1">'opp_elo_n'</span><span class="p">,</span> <span class="s1">'game_location'</span><span class="p">,</span> <span class="s1">'game_result'</span><span class="p">]</span>
+<span class="n">nba_orig_df</span> <span class="o">=</span> <span class="n">nba_orig_df</span><span class="p">[</span><span class="n">columns_to_keep</span><span class="p">]</span>
+
+<span class="c1"># The dataframe for the assigned team is called assigned_team_df. </span>
+<span class="c1"># The assigned team is the Chicago Bulls from 1996-1998.</span>
+<span class="n">assigned_years_league_df</span> <span class="o">=</span> <span class="n">nba_orig_df</span><span class="p">[(</span><span class="n">nba_orig_df</span><span class="p">[</span><span class="s1">'year_id'</span><span class="p">]</span><span class="o">.</span><span class="n">between</span><span class="p">(</span><span class="mi">1996</span><span class="p">,</span> <span class="mi">1998</span><span class="p">))]</span>
+<span class="n">assigned_team_df</span> <span class="o">=</span> <span class="n">assigned_years_league_df</span><span class="p">[(</span><span class="n">assigned_years_league_df</span><span class="p">[</span><span class="s1">'fran_id'</span><span class="p">]</span><span class="o">==</span><span class="s1">'Bulls'</span><span class="p">)]</span>
+<span class="n">assigned_team_df</span> <span class="o">=</span> <span class="n">assigned_team_df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">display</span><span class="p">(</span><span class="n">HTML</span><span class="p">(</span><span class="n">assigned_team_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span><span class="o">.</span><span class="n">to_html</span><span class="p">()))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"printed only the first five observations..."</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Number of rows in the data set ="</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">assigned_team_df</span><span class="p">))</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea">
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>game_id</th>
+      <th>year_id</th>
+      <th>fran_id</th>
+      <th>pts</th>
+      <th>opp_pts</th>
+      <th>elo_n</th>
+      <th>opp_elo_n</th>
+      <th>game_location</th>
+      <th>game_result</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>199511030CHI</td>
+      <td>1996</td>
+      <td>Bulls</td>
+      <td>105</td>
+      <td>91</td>
+      <td>1598.2924</td>
+      <td>1531.7449</td>
+      <td>H</td>
+      <td>W</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>199511040CHI</td>
+      <td>1996</td>
+      <td>Bulls</td>
+      <td>107</td>
+      <td>85</td>
+      <td>1604.3940</td>
+      <td>1458.6415</td>
+      <td>H</td>
+      <td>W</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>199511070CHI</td>
+      <td>1996</td>
+      <td>Bulls</td>
+      <td>117</td>
+      <td>108</td>
+      <td>1605.7983</td>
+      <td>1310.9349</td>
+      <td>H</td>
+      <td>W</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>199511090CLE</td>
+      <td>1996</td>
+      <td>Bulls</td>
+      <td>106</td>
+      <td>88</td>
+      <td>1618.8701</td>
+      <td>1452.8268</td>
+      <td>A</td>
+      <td>W</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>199511110CHI</td>
+      <td>1996</td>
+      <td>Bulls</td>
+      <td>110</td>
+      <td>106</td>
+      <td>1621.1591</td>
+      <td>1490.2861</td>
+      <td>H</td>
+      <td>W</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+</div>
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>printed only the first five observations...
+Number of rows in the data set = 246
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2>Step 2: Pick Your Team<a rel="noopener" class="anchor-link" href="https://learn.snhu.edu/d2l/le/dropbox/894405/1517486/DownloadSubmissionFile?fid=53870060&amp;sid=21808051#Step-2:-Pick-Your-Team">¶</a></h2><p>In this step, you will pick your team. The range of years that you will study for your team is <font color="blue"><strong>2013-2015</strong></font>. Make the following edits to the code block below:</p>
+<ol>
+<li><font color="red"> Replace <strong>??TEAM??</strong> with your choice of team from one of the following team names. </font><br>
+<font color="blue">*Bucks, Bulls, Cavaliers, Celtics, Clippers, Grizzlies, Hawks, Heat, Jazz, Kings, Knicks, Lakers, Magic, Mavericks, Nets, Nuggets, Pacers, Pelicans, Pistons, Raptors, Rockets, Sixers, Spurs, Suns, Thunder, Timberwolves, Trailblazers, Warriors, Wizards*</font><br>
+Remember to enter the team name within single quotes. For example, if you picked the Suns, then ??TEAM?? should be replaced with 'Suns'.  </li>
+</ol>
+<p>After you are done with your edits, click the block of code below and hit the <strong>Run</strong> button above.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Range of years: 2013-2015 (Note: The line below selects ALL teams within the three-year period 2013-2015. This is not your team's dataframe.</span>
+<span class="n">your_years_leagues_df</span> <span class="o">=</span> <span class="n">nba_orig_df</span><span class="p">[(</span><span class="n">nba_orig_df</span><span class="p">[</span><span class="s1">'year_id'</span><span class="p">]</span><span class="o">.</span><span class="n">between</span><span class="p">(</span><span class="mi">2013</span><span class="p">,</span> <span class="mi">2015</span><span class="p">))]</span>
+
+<span class="c1"># The dataframe for your team is called your_team_df.</span>
+<span class="c1"># ---- TODO: make your edits here ----</span>
+<span class="n">your_team_df</span> <span class="o">=</span> <span class="n">your_years_leagues_df</span><span class="p">[(</span><span class="n">your_years_leagues_df</span><span class="p">[</span><span class="s1">'fran_id'</span><span class="p">]</span><span class="o">==</span><span class="s1">'Timberwolves'</span><span class="p">)]</span>
+<span class="n">your_team_df</span> <span class="o">=</span> <span class="n">your_team_df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">display</span><span class="p">(</span><span class="n">HTML</span><span class="p">(</span><span class="n">your_team_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span><span class="o">.</span><span class="n">to_html</span><span class="p">()))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"printed only the first five observations..."</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Number of rows in the data set ="</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">your_team_df</span><span class="p">))</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea">
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>game_id</th>
+      <th>year_id</th>
+      <th>fran_id</th>
+      <th>pts</th>
+      <th>opp_pts</th>
+      <th>elo_n</th>
+      <th>opp_elo_n</th>
+      <th>game_location</th>
+      <th>game_result</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>201211020MIN</td>
+      <td>2013</td>
+      <td>Timberwolves</td>
+      <td>92</td>
+      <td>80</td>
+      <td>1419.6448</td>
+      <td>1407.2527</td>
+      <td>H</td>
+      <td>W</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>201211040TOR</td>
+      <td>2013</td>
+      <td>Timberwolves</td>
+      <td>86</td>
+      <td>105</td>
+      <td>1409.3867</td>
+      <td>1435.9320</td>
+      <td>A</td>
+      <td>L</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>201211050BRK</td>
+      <td>2013</td>
+      <td>Timberwolves</td>
+      <td>107</td>
+      <td>96</td>
+      <td>1423.3395</td>
+      <td>1364.7391</td>
+      <td>A</td>
+      <td>W</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>201211070MIN</td>
+      <td>2013</td>
+      <td>Timberwolves</td>
+      <td>90</td>
+      <td>75</td>
+      <td>1435.6484</td>
+      <td>1487.2438</td>
+      <td>H</td>
+      <td>W</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>201211090MIN</td>
+      <td>2013</td>
+      <td>Timberwolves</td>
+      <td>96</td>
+      <td>94</td>
+      <td>1440.7579</td>
+      <td>1545.9747</td>
+      <td>H</td>
+      <td>W</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+</div>
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>printed only the first five observations...
+Number of rows in the data set = 246
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2>Step 3: Data Visualization: Points Scored by Your Team<a rel="noopener" class="anchor-link" href="https://learn.snhu.edu/d2l/le/dropbox/894405/1517486/DownloadSubmissionFile?fid=53870060&amp;sid=21808051#Step-3:-Data-Visualization:-Points-Scored-by-Your-Team">¶</a></h2><p>The coach has requested that you provide a visual that shows the distribution of points scored by your team in the years 2013-2015. The code below provides two possible options. Pick <strong>ONE</strong> of these two plots to include in your summary report. Choose the plot that you think provides the best visual for the distribution of points scored by your team. In your summary report, you must explain why you think your visual is the best choice.</p>
+<p>Click the block of code below and hit the <strong>Run</strong> button above.<br>
+NOTE: If the plots are not created, click the code section and hit the <strong>Run</strong> button again.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+
+<span class="c1"># Histogram</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">your_team_df</span><span class="p">[</span><span class="s1">'pts'</span><span class="p">],</span> <span class="n">bins</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">'Histogram of points scored by Your Team in 2013 to 2015'</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">'Points'</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">'Frequency'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span>
+
+<span class="c1"># Scatterplot</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">'Scatterplot of points scored by Your Team in 2013 to 2015'</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">regplot</span><span class="p">(</span><span class="n">your_team_df</span><span class="p">[</span><span class="s1">'year_id'</span><span class="p">],</span> <span class="n">your_team_df</span><span class="p">[</span><span class="s1">'pts'</span><span class="p">],</span> <span class="n">ci</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+
+
+<div class="output_png output_subarea">
+<img src="javascript://">
+</div>
+
+</div>
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre></pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+
+
+<div class="output_png output_subarea">
+<img src="javascript://">
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2>Step 4: Data Visualization: Points Scored by the Assigned Team<a rel="noopener" class="anchor-link" href="https://learn.snhu.edu/d2l/le/dropbox/894405/1517486/DownloadSubmissionFile?fid=53870060&amp;sid=21808051#Step-4:-Data-Visualization:-Points-Scored-by-the-Assigned-Team">¶</a></h2><p>The coach has also requested that you provide a visual that shows a distribution of points scored by the Bulls from years 1996-1998. The code below provides two possible options. Pick <strong>ONE</strong> of these two plots to include in your summary report. Choose the plot that you think provides the best visual for the distribution of points scored by your team. In your summary report, you will explain why you think your visual is the best choice.</p>
+<p>Click the block of code below and hit the <strong>Run</strong> button above.<br>
+NOTE: If the plots are not created, click the code section and hit the <strong>Run</strong> button again.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+
+<span class="c1"># Histogram</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">assigned_team_df</span><span class="p">[</span><span class="s1">'pts'</span><span class="p">],</span> <span class="n">bins</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">'Histogram of points scored by the Bulls in 1996 to 1998'</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">'Points'</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">'Frequency'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># Scatterplot</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">'Scatterplot of points scored by the Bulls in 1996 to 1998'</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">regplot</span><span class="p">(</span><span class="n">assigned_team_df</span><span class="p">[</span><span class="s1">'year_id'</span><span class="p">],</span> <span class="n">assigned_team_df</span><span class="p">[</span><span class="s1">'pts'</span><span class="p">],</span> <span class="n">ci</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+
+
+<div class="output_png output_subarea">
+<img src="javascript://">
+</div>
+
+</div>
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+
+
+<div class="output_png output_subarea">
+<img src="javascript://">
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2>Step 5: Data Visualization: Comparing the Two Teams<a rel="noopener" class="anchor-link" href="https://learn.snhu.edu/d2l/le/dropbox/894405/1517486/DownloadSubmissionFile?fid=53870060&amp;sid=21808051#Step-5:-Data-Visualization:-Comparing-the-Two-Teams">¶</a></h2><p>Now the coach wants you to prepare one plot that provides a visual of the differences in the distribution of points scored by the assigned team and your team. The code below provides two possible visuals. Choose the plot that allows for the best comparison of the data distributions.</p>
+<p>Click the block of code below and hit the <strong>Run</strong> button above.<br>
+NOTE: If the plots are not created, click the code section and hit the <strong>Run</strong> button again.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+
+<span class="c1"># Side-by-side boxplots</span>
+<span class="n">both_teams_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">((</span><span class="n">assigned_team_df</span><span class="p">,</span> <span class="n">your_team_df</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">'Boxplot to compare points distribution'</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span> 
+<span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">'fran_id'</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="s1">'pts'</span><span class="p">,</span><span class="n">data</span><span class="o">=</span><span class="n">both_teams_df</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span>
+
+<span class="c1"># Histograms</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">assigned_team_df</span><span class="p">[</span><span class="s1">'pts'</span><span class="p">],</span> <span class="mi">20</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">'Assigned Team'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">your_team_df</span><span class="p">[</span><span class="s1">'pts'</span><span class="p">],</span> <span class="mi">20</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">'Your Team'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">'Histogram to compare points distribution'</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span> 
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">'Points'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">'upper right'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+
+
+<div class="output_png output_subarea">
+<img src="javascript://">
+</div>
+
+</div>
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre></pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+
+
+<div class="output_png output_subarea">
+<img src="javascript://">
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2>Step 6: Descriptive Statistics: Relative Skill of Your Team<a rel="noopener" class="anchor-link" href="https://learn.snhu.edu/d2l/le/dropbox/894405/1517486/DownloadSubmissionFile?fid=53870060&amp;sid=21808051#Step-6:-Descriptive-Statistics:-Relative-Skill-of-Your-Team">¶</a></h2><p>The management of your team wants you to run descriptive statistics on the relative skill of your team from 2013-2015. In this project, you will use the variable 'elo_n' to respresent the relative skill of the teams. Calculate descriptive statistics including the mean, median, variance, and standard deviation for the relative skill of your team. Make the following edits to the code block below:</p>
+<ol>
+<li><font color="red"> Replace <strong>??MEAN_FUNCTION??</strong> with the name of Python function that calculates the mean. </font></li>
+<li><font color="red"> Replace <strong>??MEDIAN_FUNCTION??</strong> with the name of Python function that calculates the median. </font></li>
+<li><font color="red"> Replace <strong>??VAR_FUNCTION??</strong> with the name of Python function that calculates the variance. </font></li>
+<li><font color="red"> Replace <strong>??STD_FUNCTION??</strong> with the name of Python function that calculates the standard deviation. </font></li>
+</ol>
+<p>After you are done with your edits, click the block of code below and hit the <strong>Run</strong> button above.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[8]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">"Your Team's Relative Skill in 2013 to 2015"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"-------------------------------------------------------"</span><span class="p">)</span>
+
+<span class="c1"># ---- TODO: make your edits here ----</span>
+<span class="n">mean</span> <span class="o">=</span> <span class="n">your_team_df</span><span class="p">[</span><span class="s1">'elo_n'</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">median</span> <span class="o">=</span> <span class="n">your_team_df</span><span class="p">[</span><span class="s1">'elo_n'</span><span class="p">]</span><span class="o">.</span><span class="n">median</span><span class="p">()</span>
+<span class="n">variance</span> <span class="o">=</span> <span class="n">your_team_df</span><span class="p">[</span><span class="s1">'elo_n'</span><span class="p">]</span><span class="o">.</span><span class="n">var</span><span class="p">()</span>
+<span class="n">stdeviation</span> <span class="o">=</span> <span class="n">your_team_df</span><span class="p">[</span><span class="s1">'elo_n'</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">'Mean ='</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'Median ='</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">median</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'Variance ='</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">variance</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'Standard Deviation ='</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">stdeviation</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Your Team's Relative Skill in 2013 to 2015
+-------------------------------------------------------
+Mean = 1448.02
+Median = 1449.49
+Variance = 7013.67
+Standard Deviation = 83.75
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2>Step 7 - Descriptive Statistics - Relative Skill of the Assigned Team<a rel="noopener" class="anchor-link" href="https://learn.snhu.edu/d2l/le/dropbox/894405/1517486/DownloadSubmissionFile?fid=53870060&amp;sid=21808051#Step-7---Descriptive-Statistics---Relative-Skill-of-the-Assigned-Team">¶</a></h2><p>The management also wants you to run descriptive statistics for the relative skill of the Bulls from 1996-1998. Calculate descriptive statistics including the mean, median, variance, and standard deviation for the relative skill of the assigned team.</p>
+<p><font><strong>You are to write this code block yourself.</strong></font></p>
+<p>Use Step 6 to help you write this code block. Here is some information that will help you write this code block.</p>
+<ol>
+<li><font color="red"> The dataframe for the assigned team is called assigned_team_df. </font></li>
+<li><font color="red"> The variable 'elo_n' respresent the relative skill of the teams. </font></li>
+<li><font color="red"> Your statistics should be rounded to two decimal places. </font></li>
+</ol>
+<p>Write your code in the code block section below. After you are done, click this block of code and hit the <strong>Run</strong> button above. Reach out to your instructor if you need more help with this step.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[9]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">"Assigned Team's Relative Skill in 1996 to 1998"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"-------------------------------------------------------"</span><span class="p">)</span>
+
+
+<span class="n">mean</span> <span class="o">=</span> <span class="n">assigned_team_df</span><span class="p">[</span><span class="s1">'elo_n'</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">median</span> <span class="o">=</span> <span class="n">assigned_team_df</span><span class="p">[</span><span class="s1">'elo_n'</span><span class="p">]</span><span class="o">.</span><span class="n">median</span><span class="p">()</span>
+<span class="n">variance</span> <span class="o">=</span> <span class="n">assigned_team_df</span><span class="p">[</span><span class="s1">'elo_n'</span><span class="p">]</span><span class="o">.</span><span class="n">var</span><span class="p">()</span>
+<span class="n">stdeviation</span> <span class="o">=</span> <span class="n">assigned_team_df</span><span class="p">[</span><span class="s1">'elo_n'</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">'Mean ='</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'Median ='</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">median</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'Variance ='</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">variance</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'Standard Deviation ='</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">stdeviation</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Assigned Team's Relative Skill in 1996 to 1998
+-------------------------------------------------------
+Mean = 1739.8
+Median = 1751.23
+Variance = 2651.55
+Standard Deviation = 51.49
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2>Step 8: Confidence Intervals for the Average Relative Skill of All Teams in Your Team's Years<a rel="noopener" class="anchor-link" href="https://learn.snhu.edu/d2l/le/dropbox/894405/1517486/DownloadSubmissionFile?fid=53870060&amp;sid=21808051#Step-8:-Confidence-Intervals-for-the-Average-Relative-Skill-of-All-Teams-in-Your-Team&#39;s-Years">¶</a></h2><p>The management wants to you to calculate a 95% confidence interval for the average relative skill of all teams in 2013-2015. To construct a confidence interval, you will need the mean and standard error of the relative skill level in these years. The code block below calculates the mean and the standard deviation. Your edits will calculate the standard error and the confidence interval. Make the following edits to the code block below:</p>
+<ol>
+<li><font color="red"> Replace <strong>??SD_VARIABLE??</strong> with the variable name representing the standard deviation of relative skill of all teams from your years. </font> (Hint: the <em>standard deviation</em> variable is in the code block below)</li>
+<li><font color="red"> Replace <strong>??CL??</strong> with the confidence level of the confidence interval. </font></li>
+<li><font color="red"> Replace <strong>??MEAN_VARIABLE??</strong> with the variable name representing the mean relative skill of all teams from your years. </font> (Hint: the <em>mean</em> variable is in the code block below)</li>
+<li><font color="red"> Replace <strong>??SE_VARIABLE??</strong> with the variable name representing the standard error. </font> (Hint: the <em>standard error</em> variable is in the code block below)</li>
+</ol>
+<p>The management also wants you to calculate the probability that a team in the league has a relative skill level less than that of the team that you picked. Assuming that the relative skill of teams is Normally distributed, Python methods for a Normal distribution can be used to answer this question. The code block below uses two of these Python methods. Your task is to identify the correct Python method and report the probability.</p>
+<p>After you are done with your edits, click the block of code below and hit the <strong>Run</strong> button above.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[11]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">"Confidence Interval for Average Relative Skill in the years 2013 to 2015"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"------------------------------------------------------------------------------------------------------------"</span><span class="p">)</span>
+
+<span class="c1"># Mean relative skill of all teams from the years 2013-2015</span>
+<span class="n">mean</span> <span class="o">=</span> <span class="n">your_years_leagues_df</span><span class="p">[</span><span class="s1">'elo_n'</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+<span class="c1"># Standard deviation of the relative skill of all teams from the years 2013-2015</span>
+<span class="n">stdev</span> <span class="o">=</span> <span class="n">your_years_leagues_df</span><span class="p">[</span><span class="s1">'elo_n'</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
+
+<span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">your_years_leagues_df</span><span class="p">)</span>
+
+<span class="c1">#Confidence interval</span>
+<span class="c1"># ---- TODO: make your edits here ----</span>
+<span class="n">stderr</span> <span class="o">=</span> <span class="n">stdev</span><span class="o">/</span><span class="p">(</span><span class="n">n</span> <span class="o">**</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="n">conf_int_95</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">interval</span><span class="p">(</span><span class="mf">0.95</span><span class="p">,</span> <span class="n">mean</span><span class="p">,</span> <span class="n">stderr</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"95</span><span class="si">% c</span><span class="s2">onfidence interval (unrounded) for Average Relative Skill (ELO) in the years 2013 to 2015 ="</span><span class="p">,</span> <span class="n">conf_int_95</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"95</span><span class="si">% c</span><span class="s2">onfidence interval (rounded) for Average Relative Skill (ELO) in the years 2013 to 2015 = ("</span><span class="p">,</span>  <span class="nb">round</span><span class="p">(</span><span class="n">conf_int_95</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span><span class="s2">","</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">conf_int_95</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span><span class="s2">")"</span><span class="p">)</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Probability a team has Average Relative Skill LESS than the Average Relative Skill (ELO) of your team in the years 2013 to 2015"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"----------------------------------------------------------------------------------------------------------------------------------------------------------"</span><span class="p">)</span>
+
+<span class="n">mean_elo_your_team</span> <span class="o">=</span> <span class="n">your_team_df</span><span class="p">[</span><span class="s1">'elo_n'</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+<span class="n">choice1</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">sf</span><span class="p">(</span><span class="n">mean_elo_your_team</span><span class="p">,</span> <span class="n">mean</span><span class="p">,</span> <span class="n">stdev</span><span class="p">)</span>
+<span class="n">choice2</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">mean_elo_your_team</span><span class="p">,</span> <span class="n">mean</span><span class="p">,</span> <span class="n">stdev</span><span class="p">)</span>
+
+<span class="c1"># Pick the correct answer.</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Which of the two choices is correct?"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Choice 1 ="</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">choice1</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Choice 2 ="</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">choice2</span><span class="p">,</span><span class="mi">4</span><span class="p">))</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Confidence Interval for Average Relative Skill in the years 2013 to 2015
+------------------------------------------------------------------------------------------------------------
+95% confidence interval (unrounded) for Average Relative Skill (ELO) in the years 2013 to 2015 = (1502.0236894390478, 1507.1824625533618)
+95% confidence interval (rounded) for Average Relative Skill (ELO) in the years 2013 to 2015 = ( 1502.02 , 1507.18 )
+
+
+Probability a team has Average Relative Skill LESS than the Average Relative Skill (ELO) of your team in the years 2013 to 2015
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+Which of the two choices is correct?
+Choice 1 = 0.6917
+Choice 2 = 0.3083
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2>Step 9 - Confidence Intervals  for the Average Relative Skill of All Teams in the Assigned Team's Years<a rel="noopener" class="anchor-link" href="https://learn.snhu.edu/d2l/le/dropbox/894405/1517486/DownloadSubmissionFile?fid=53870060&amp;sid=21808051#Step-9---Confidence-Intervals--for-the-Average-Relative-Skill-of-All-Teams-in-the-Assigned-Team&#39;s-Years">¶</a></h2><p>The management also wants to you to calculate a 95% confidence interval for the average relative skill of all teams in the years 1996-1998. Calculate this confidence interval.</p>
+<p><font><strong>You are to write this code block yourself.</strong></font></p>
+<p>Use Step 8 to help you write this code block. Here is some information that will help you write this code block. Reach out to your instructor if you need help.</p>
+<ol>
+<li><font color="red"> The dataframe for the years 1996-1998 is called assigned_years_league_df </font></li>
+<li><font color="red"> The variable 'elo_n' represents the relative skill of teams. </font></li>
+<li><font color="red"> Start by calculating the mean and the standard deviation of relative skill (ELO) in years 1996-1998. </font></li>
+<li><font color="red"> Calculate n that represents the sample size. </font></li>
+<li><font color="red"> Calculate the standard error which is equal to the standard deviation of Relative Skill (ELO) divided by the square root of the sample size n. </font></li>
+<li><font color="red">  Assuming that the population standard deviation is known, use Python methods for the Normal distribution to calculate the confidence interval. </font></li>
+<li><font color="red"> Your statistics should be rounded to two decimal places. </font></li>
+</ol>
+<p>The management also wants you to calculate the probability that a team had a relative skill level less than the Bulls in years 1996-1998. Assuming that the relative skill of teams is Normally distributed, calculate this probability.</p>
+<p><font><strong>You are to write this code block yourself.</strong></font></p>
+<p>Use Step 8 to help you write this code block. Here is some information that will help you write this code block.</p>
+<ol>
+<li><font color="red"> Calculate the mean relative skill of the Bulls. Note that the dataframe for the Bulls is called assigned_team_df. The variable 'elo_n' represents the relative skill. </font></li>
+<li><font color="red"> Use Python methods for a Normal distribution to calculate this probability. </font></li>
+<li><font color="red"> The probability value should be rounded to four decimal places. </font></li>
+</ol>
+<p>Write your code in the code block section below. After you are done, click this block of code and hit the <strong>Run</strong> button above. Reach out to your instructor if you need more help with this step.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[17]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">"Confidence Interval for Average Relative Skill in the years 1996 to 1998"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"------------------------------------------------------------------------------------------------------------"</span><span class="p">)</span>
+
+<span class="c1"># Mean relative skill of all teams from the years 1996-1998</span>
+<span class="n">mean</span> <span class="o">=</span> <span class="n">assigned_years_league_df</span><span class="p">[</span><span class="s1">'elo_n'</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+<span class="c1"># Standard deviation of the relative skill of all teams from the years 1996-1998</span>
+<span class="n">stdev</span> <span class="o">=</span> <span class="n">assigned_years_league_df</span><span class="p">[</span><span class="s1">'elo_n'</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
+
+<span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">assigned_years_league_df</span><span class="p">)</span>
+
+<span class="c1">#Confidence interval</span>
+<span class="n">stderr</span> <span class="o">=</span> <span class="n">stdev</span><span class="o">/</span><span class="p">(</span><span class="n">n</span> <span class="o">**</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="n">conf_int_95</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">interval</span><span class="p">(</span><span class="mf">0.95</span><span class="p">,</span> <span class="n">mean</span><span class="p">,</span> <span class="n">stderr</span><span class="p">)</span>
+
+<span class="n">mean_elo_assigned_team</span> <span class="o">=</span> <span class="n">assigned_team_df</span><span class="p">[</span><span class="s1">'elo_n'</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">cumulativefun</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">mean_elo_assigned_team</span><span class="p">,</span> <span class="n">mean</span><span class="p">,</span> <span class="n">stdev</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"95</span><span class="si">% c</span><span class="s2">onfidence interval (unrounded) for Average Relative Skill (ELO) in the years 1996 to 1998 ="</span><span class="p">,</span> <span class="n">conf_int_95</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"95</span><span class="si">% c</span><span class="s2">onfidence interval (rounded) for Average Relative Skill (ELO) in the years 1996 to 1998 = ("</span><span class="p">,</span>  <span class="nb">round</span><span class="p">(</span><span class="n">conf_int_95</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span><span class="s2">","</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">conf_int_95</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span><span class="s2">")"</span><span class="p">)</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Probability a team has Average Relative Skill LESS than the Average Relative Skill (ELO) of assigned team in the years 1996 to 1998:"</span><span class="p">,</span> <span class="n">cumulativefun</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+<div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Confidence Interval for Average Relative Skill in the years 1996 to 1998
+------------------------------------------------------------------------------------------------------------
+95% confidence interval (unrounded) for Average Relative Skill (ELO) in the years 1996 to 1998 = (1487.6565859527095, 1493.6465501840999)
+95% confidence interval (rounded) for Average Relative Skill (ELO) in the years 1996 to 1998 = ( 1487.66 , 1493.65 )
+
+
+Probability a team has Average Relative Skill LESS than the Average Relative Skill (ELO) of assigned team in the years 1996 to 1998: 0.9732205992228153
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2>End of Project One<a rel="noopener" class="anchor-link" href="https://learn.snhu.edu/d2l/le/dropbox/894405/1517486/DownloadSubmissionFile?fid=53870060&amp;sid=21808051#End-of-Project-One">¶</a></h2><p>Download the HTML output and submit it with your summary report for Project One. The HTML output can be downloaded by clicking <strong>File</strong>, then <strong>Download as</strong>, then <strong>HTML</strong>. Do not include the Python code within your summary report.</p>
+
+</div>
+</div>
+</div>
+    </div>
+  </div>
+
+
+ 
+
+
+
+<script type="text/javascript" src="./Jupyter_notebook_provided_by_instructor_files/MathML.js.download"></script><script type="text/javascript">document.addEventListener('DOMContentLoaded', function() { D2LMathML.DesktopInit('https://s.brightspace.com/lib/mathjax/2.7.4/MathJax.js?config=MML_HTMLorMML','https://s.brightspace.com/lib/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML','130',false); });</script></body><grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration></html>
